@@ -836,12 +836,47 @@
             return el;
         }
         
-        // Filter books by culture and genre
+        // Filter books by culture and genre, with density control
+        let displayDensity = 0.15; // Show 15% of books by default to reduce clutter
+        
         function filterBooks() {
-            return books.filter(b => {
+            let filtered = books.filter(b => {
                 const cultureMatch = currentCulture === 'all' || b.culture === currentCulture;
                 const genreMatch = currentGenre === 'all' || (b.genre && b.genre.includes(currentGenre));
                 return cultureMatch && genreMatch;
+            });
+            
+            // If showing all and too many books, sample to reduce density
+            if (currentCulture === 'all' && currentGenre === 'all' && filtered.length > 100) {
+                // Keep top-rated books + random sample
+                const topBooks = filtered.filter(b => b.rating >= 9.0);
+                const otherBooks = filtered.filter(b => b.rating < 9.0);
+                const sampleSize = Math.floor(otherBooks.length * displayDensity);
+                const sampled = otherBooks.sort(() => 0.5 - Math.random()).slice(0, sampleSize);
+                filtered = [...topBooks, ...sampled];
+            }
+            
+            return filtered;
+        }
+        
+        // Sun and Moon related books (special category)
+        const celestialBooks = [
+            { id: 9001, title: "后羿射日", titleEn: "Hou Yi Shoots the Suns", author: "中国神话", country: "China", countryZh: "中国", flag: "🇨🇳", culture: "east-asia", lat: 34.26, lng: 108.95, rating: 9.5, genre: ["神话"], era: "远古", year: -2000, desc: "后羿射下九个太阳，拯救人类的神话故事。", celestial: "sun" },
+            { id: 9002, title: "嫦娥奔月", titleEn: "Chang'e Flies to the Moon", author: "中国神话", country: "China", countryZh: "中国", flag: "🇨🇳", culture: "east-asia", lat: 39.90, lng: 116.40, rating: 9.5, genre: ["神话"], era: "远古", year: -2000, desc: "嫦娥偷吃仙丹飞向月亮的故事。", celestial: "moon" },
+            { id: 9003, title: "天照大神", titleEn: "Amaterasu", author: "日本神话", country: "Japan", countryZh: "日本", flag: "🇯🇵", culture: "east-asia", lat: 34.69, lng: 135.50, rating: 9.3, genre: ["神话"], era: "古代", year: 712, desc: "日本太阳女神天照大神的神话。", celestial: "sun" },
+            { id: 9004, title: "月读命", titleEn: "Tsukuyomi", author: "日本神话", country: "Japan", countryZh: "日本", flag: "🇯🇵", culture: "east-asia", lat: 35.01, lng: 135.76, rating: 9.0, genre: ["神话"], era: "古代", year: 712, desc: "日本月亮之神月读命的故事。", celestial: "moon" },
+            { id: 9005, title: "太阳神拉", titleEn: "Ra - The Sun God", author: "埃及神话", country: "Egypt", countryZh: "埃及", flag: "🇪🇬", culture: "middle-east", lat: 29.98, lng: 31.13, rating: 9.4, genre: ["神话"], era: "古代", year: -3000, desc: "埃及太阳神拉的神话故事。", celestial: "sun" },
+            { id: 9006, title: "阿波罗", titleEn: "Apollo - God of Sun", author: "希腊神话", country: "Greece", countryZh: "希腊", flag: "🇬🇷", culture: "europe", lat: 37.97, lng: 23.72, rating: 9.3, genre: ["神话"], era: "古代", year: -800, desc: "希腊太阳神阿波罗的神话。", celestial: "sun" },
+            { id: 9007, title: "阿尔忒弥斯", titleEn: "Artemis - Goddess of Moon", author: "希腊神话", country: "Greece", countryZh: "希腊", flag: "🇬🇷", culture: "europe", lat: 37.97, lng: 23.72, rating: 9.2, genre: ["神话"], era: "古代", year: -800, desc: "希腊月亮女神阿尔忒弥斯的神话。", celestial: "moon" },
+            { id: 9008, title: "苏利耶", titleEn: "Surya - Hindu Sun God", author: "印度神话", country: "India", countryZh: "印度", flag: "🇮🇳", culture: "south-asia", lat: 28.61, lng: 77.23, rating: 9.1, genre: ["神话"], era: "古代", year: -1500, desc: "印度太阳神苏利耶的故事。", celestial: "sun" }
+        ];
+        
+        // Add celestial books to main array on load
+        function addCelestialBooks() {
+            celestialBooks.forEach(cb => {
+                if (!books.find(b => b.id === cb.id)) {
+                    books.push(cb);
+                }
             });
         }
         
@@ -862,14 +897,46 @@
                 .htmlElement(createBookMarker)
                 (document.getElementById('globe-container'));
             
-            // Make globe more visible
+            // Make globe more visible - SLOWER rotation
             globe.controls().autoRotate = true;
-            globe.controls().autoRotateSpeed = 0.3;
+            globe.controls().autoRotateSpeed = 0.05;  // Very slow, gentle rotation
             
             // Add ambient light
             const scene = globe.scene();
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
+            
+            // Add Sun
+            const sunGeometry = new THREE.SphereGeometry(8, 32, 32);
+            const sunMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0xffdd00,
+                transparent: true,
+                opacity: 0.9
+            });
+            const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+            sun.position.set(200, 80, -100);
+            scene.add(sun);
+            
+            // Sun glow
+            const sunGlow = new THREE.PointLight(0xffdd00, 1.5, 500);
+            sunGlow.position.copy(sun.position);
+            scene.add(sunGlow);
+            
+            // Add Moon
+            const moonGeometry = new THREE.SphereGeometry(3, 32, 32);
+            const moonMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0xcccccc,
+                transparent: true,
+                opacity: 0.9
+            });
+            const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+            moon.position.set(-150, 50, 80);
+            scene.add(moon);
+            
+            // Moon glow
+            const moonGlow = new THREE.PointLight(0x8888ff, 0.5, 200);
+            moonGlow.position.copy(moon.position);
+            scene.add(moonGlow);
             
             // Hide loading
             setTimeout(() => {
@@ -980,6 +1047,7 @@
         // Initialize
         window.onload = async function() {
             await loadBooks();
+            addCelestialBooks(); // Add sun/moon related books
             initGlobe();
         };
     </script>
