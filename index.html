@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FizzGlobe - 探索世界故事</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.27.0/dist/globe.gl.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --red: #ff0033;
+            --red-dark: #cc0029;
+            --red-glow: rgba(255, 0, 51, 0.5);
+            --black: #0a0a0a;
+            --card: #1a1a1a;
+            --card-hover: #252525;
+            --gray: #333;
+            --text: #fff;
+            --text-dim: #888;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--black);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0) 100%);
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--red) 0%, #ff6666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px var(--red-glow);
+        }
+        
+        .nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .nav a:hover { color: var(--red); }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--card);
+            border: 1px solid var(--gray);
+            border-radius: 25px;
+            padding: 8px 15px;
+            transition: border-color 0.3s;
+        }
+        
+        .search-box:focus-within { border-color: var(--red); }
+        
+        .search-box input {
+            background: none;
+            border: none;
+            color: var(--text);
+            outline: none;
+            width: 200px;
+            font-size: 14px;
+        }
+        
+        .search-box .icon { color: var(--text-dim); margin-right: 10px; }
+        
+        /* Globe Container */
+        #globe-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        /* Stats Overlay */
+        .stats-overlay {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            display: flex;
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(26, 26, 26, 0.9);
+            border: 1px solid var(--gray);
+            border-radius: 12px;
+            padding: 15px 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            color: var(--red);
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+        
+        /* Filter Tabs */
+        .filter-tabs {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(26, 26, 26, 0.9);
+            padding: 10px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--gray);
+        }
+        
+        .filter-tab {
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .filter-tab:hover { color: var(--text); }
+        .filter-tab.active {
+            background: var(--red);
+            color: var(--text);
+        }
+        
+        /* Book Panel */
+        .book-panel {
+            position: fixed;
+            right: -450px;
+            top: 0;
+            width: 450px;
+            height: 100vh;
+            background: var(--card);
+            border-left: 1px solid var(--gray);
+            padding: 80px 30px 30px;
+            overflow-y: auto;
+            transition: right 0.4s ease;
+            z-index: 999;
+        }
+        
+        .book-panel.active { right: 0; }
+        
+        .book-panel .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .book-cover {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, var(--gray) 0%, var(--black) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px solid var(--gray);
+        }
+        
+        .book-cover .title-preview {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            color: var(--red);
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .book-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .book-title-en {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-bottom: 15px;
+        }
+        
+        .book-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .book-tag {
+            padding: 5px 12px;
+            background: var(--black);
+            border: 1px solid var(--gray);
+            border-radius: 15px;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+        
+        .book-tag.country {
+            border-color: var(--red);
+            color: var(--red);
+        }
+        
+        .book-info {
+            margin-bottom: 20px;
+        }
+        
+        .book-info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .book-info-label { color: var(--text-dim); }
+        .book-info-value { color: var(--text); }
+        
+        .book-desc {
+            line-height: 1.8;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+        }
+        
+        .book-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+            border: none;
+            color: var(--text);
+            box-shadow: 0 4px 15px var(--red-glow);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--red-glow);
+        }
+        
+        .btn-secondary {
+            background: var(--black);
+            border: 1px solid var(--gray);
+            color: var(--text);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--red);
+            color: var(--red);
+        }
+        
+        /* Country Panel */
+        .country-panel {
+            position: fixed;
+            left: -350px;
+            top: 0;
+            width: 350px;
+            height: 100vh;
+            background: var(--card);
+            border-right: 1px solid var(--gray);
+            padding: 80px 20px 20px;
+            overflow-y: auto;
+            transition: left 0.4s ease;
+            z-index: 998;
+        }
+        
+        .country-panel.active { left: 0; }
+        
+        .country-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .country-flag {
+            font-size: 48px;
+        }
+        
+        .country-name {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .country-name-en {
+            font-size: 14px;
+            color: var(--text-dim);
+        }
+        
+        .country-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .country-stat {
+            background: var(--black);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .country-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            color: var(--red);
+        }
+        
+        .country-stat-label {
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+        
+        .book-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .book-item {
+            background: var(--black);
+            border: 1px solid var(--gray);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .book-item:hover {
+            border-color: var(--red);
+            transform: translateX(5px);
+        }
+        
+        .book-item-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .book-item-author {
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+        
+        .book-item-rating {
+            float: right;
+            color: var(--red);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        /* Loading */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--black);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        
+        .loading.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            color: var(--red);
+            margin-top: 20px;
+        }
+        
+        .loading-bar {
+            width: 200px;
+            height: 3px;
+            background: var(--gray);
+            border-radius: 2px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        
+        .loading-bar-fill {
+            height: 100%;
+            background: var(--red);
+            animation: loading 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes loading {
+            0% { width: 0; margin-left: 0; }
+            50% { width: 100%; margin-left: 0; }
+            100% { width: 0; margin-left: 100%; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { padding: 10px 15px; }
+            .logo { font-size: 20px; }
+            .nav { display: none; }
+            .stats-overlay { flex-direction: column; left: 15px; bottom: 100px; }
+            .filter-tabs { width: 90%; overflow-x: auto; }
+            .book-panel, .country-panel { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loading-text">FIZZGLOBE</div>
+        <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+    </div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">FIZZGLOBE</div>
+        <nav class="nav">
+            <a href="#">🔥 热门</a>
+            <a href="#">🌏 地区</a>
+            <a href="#">📚 分类</a>
+            <a href="#">⏰ 时代</a>
+        </nav>
+        <div class="search-box">
+            <span class="icon">🔍</span>
+            <input type="text" placeholder="搜索故事、作者、国家..." id="searchInput">
+        </div>
+    </header>
+    
+    <!-- Globe -->
+    <div id="globe-container"></div>
+    
+    <!-- Stats Overlay -->
+    <div class="stats-overlay">
+        <div class="stat-card">
+            <div class="stat-value" id="totalBooks">1000</div>
+            <div class="stat-label">经典作品</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="totalCountries">50+</div>
+            <div class="stat-label">国家地区</div>
+        </div>
+    </div>
+    
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">🌍 全部</button>
+        <button class="filter-tab" data-filter="novel">📚 小说</button>
+        <button class="filter-tab" data-filter="myth">👻 神话</button>
+        <button class="filter-tab" data-filter="history">🏛️ 历史</button>
+        <button class="filter-tab" data-filter="poetry">📜 诗歌</button>
+    </div>
+    
+    <!-- Country Panel -->
+    <div class="country-panel" id="countryPanel">
+        <div class="country-header">
+            <span class="country-flag" id="countryFlag">🇨🇳</span>
+            <div>
+                <div class="country-name" id="countryName">中国</div>
+                <div class="country-name-en" id="countryNameEn">China</div>
+            </div>
+        </div>
+        <div class="country-stats">
+            <div class="country-stat">
+                <div class="country-stat-value" id="countryBooks">245</div>
+                <div class="country-stat-label">部作品</div>
+            </div>
+            <div class="country-stat">
+                <div class="country-stat-value" id="countryRating">9.2</div>
+                <div class="country-stat-label">平均评分</div>
+            </div>
+        </div>
+        <div class="book-list" id="bookList">
+            <!-- Dynamic content -->
+        </div>
+    </div>
+    
+    <!-- Book Panel -->
+    <div class="book-panel" id="bookPanel">
+        <button class="close-btn" onclick="closeBookPanel()">✕</button>
+        <div class="book-cover">
+            <div class="title-preview" id="bookCoverTitle">西游记</div>
+        </div>
+        <h1 class="book-title" id="bookTitle">西游记</h1>
+        <div class="book-title-en" id="bookTitleEn">Journey to the West</div>
+        <div class="book-meta" id="bookMeta">
+            <span class="book-tag country">🇨🇳 中国</span>
+            <span class="book-tag">神话</span>
+            <span class="book-tag">冒险</span>
+        </div>
+        <div class="book-info">
+            <div class="book-info-row">
+                <span class="book-info-label">作者</span>
+                <span class="book-info-value" id="bookAuthor">吴承恩</span>
+            </div>
+            <div class="book-info-row">
+                <span class="book-info-label">年代</span>
+                <span class="book-info-value" id="bookEra">明代 (约1592年)</span>
+            </div>
+            <div class="book-info-row">
+                <span class="book-info-label">章节</span>
+                <span class="book-info-value" id="bookChapters">100回</span>
+            </div>
+            <div class="book-info-row">
+                <span class="book-info-label">评分</span>
+                <span class="book-info-value" id="bookRating">⭐ 9.5</span>
+            </div>
+        </div>
+        <p class="book-desc" id="bookDesc">
+            讲述孙悟空、猪八戒、沙僧保护唐僧西行取经，历经九九八十一难的神话故事。
+        </p>
+        <div class="book-actions">
+            <button class="btn btn-primary">🎬 生成 AI 番剧</button>
+            <button class="btn btn-secondary">📖 阅读原文</button>
+            <button class="btn btn-secondary">🔗 查看维基百科</button>
+        </div>
+    </div>
+    
+    <script>
+        // Book Data - loaded from JSON
+        let books = [];
+        
+        // Country flags mapping
+        const countryFlags = {
+            'China': '🇨🇳', 'Japan': '🇯🇵', 'Russia': '🇷🇺', 'France': '🇫🇷',
+            'United Kingdom': '🇬🇧', 'Spain': '🇪🇸', 'Italy': '🇮🇹', 'Germany': '🇩🇪',
+            'United States': '🇺🇸', 'India': '🇮🇳', 'Greece': '🇬🇷', 'Iran': '🇮🇷',
+            'Egypt': '🇪🇬', 'Brazil': '🇧🇷', 'Mexico': '🇲🇽', 'Nigeria': '🇳🇬',
+            'South Africa': '🇿🇦', 'Australia': '🇦🇺', 'Canada': '🇨🇦', 'Argentina': '🇦🇷',
+            'Colombia': '🇨🇴', 'Chile': '🇨🇱', 'Peru': '🇵🇪', 'Norway': '🇳🇴',
+            'Sweden': '🇸🇪', 'Denmark': '🇩🇰', 'Netherlands': '🇳🇱', 'Belgium': '🇧🇪',
+            'Switzerland': '🇨🇭', 'Austria': '🇦🇹', 'Poland': '🇵🇱', 'Czech Republic': '🇨🇿',
+            'Hungary': '🇭🇺', 'Portugal': '🇵🇹', 'Ireland': '🇮🇪', 'Scotland': '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+            'Turkey': '🇹🇷', 'Korea': '🇰🇷', 'Vietnam': '🇻🇳', 'Thailand': '🇹🇭',
+            'Indonesia': '🇮🇩', 'Philippines': '🇵🇭', 'Malaysia': '🇲🇾', 'Singapore': '🇸🇬',
+            'Israel': '🇮🇱', 'Lebanon': '🇱🇧', 'Iraq': '🇮🇶', 'Saudi Arabia': '🇸🇦',
+            'UAE': '🇦🇪', 'Pakistan': '🇵🇰', 'Bangladesh': '🇧🇩', 'Sri Lanka': '🇱🇰',
+            'Nepal': '🇳🇵', 'Afghanistan': '🇦🇫', 'Kenya': '🇰🇪', 'Morocco': '🇲🇦',
+            'Tunisia': '🇹🇳', 'Algeria': '🇩🇿', 'Ethiopia': '🇪🇹', 'Ghana': '🇬🇭'
+        };
+        
+        // Transform JSON data to internal format
+        function transformBook(b) {
+            return {
+                id: b.id,
+                title: b.title_original,
+                titleEn: b.title_english,
+                author: b.author,
+                country: b.country,
+                countryZh: b.country_zh,
+                flag: countryFlags[b.country] || '🌍',
+                lat: b.lat,
+                lng: b.lng,
+                rating: b.rating,
+                genre: b.genre || [],
+                era: b.era,
+                year: b.year_published,
+                chapters: b.chapters,
+                desc: b.description_zh || b.description_en
+            };
+        }
+        
+        // Load books from JSON
+        async function loadBooks() {
+            try {
+                const response = await fetch('./data/books.json');
+                const data = await response.json();
+                books = data.books.map(transformBook);
+                document.getElementById('totalBooks').textContent = books.length;
+                // Count unique countries
+                const countries = new Set(books.map(b => b.country));
+                document.getElementById('totalCountries').textContent = countries.size + '+';
+                return books;
+            } catch (error) {
+                console.error('Failed to load books:', error);
+                return [];
+            }
+        }
+        
+        // Initialize Globe
+        let globe;
+        
+        function initGlobe() {
+            globe = Globe()
+                .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
+                .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+                .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+                .pointsData(books)
+                .pointLat('lat')
+                .pointLng('lng')
+                .pointColor(() => '#ff0033')
+                .pointAltitude(0.05)
+                .pointRadius(0.5)
+                .pointLabel(d => `<div style="background:#1a1a1a;padding:10px;border-radius:8px;border:1px solid #ff0033;">
+                    <strong style="color:#ff0033">${d.title}</strong><br>
+                    <span style="color:#888">${d.author} | ${d.countryZh}</span>
+                </div>`)
+                .onPointClick(d => showBookPanel(d))
+                .atmosphereColor('#ff0033')
+                .atmosphereAltitude(0.15)
+                (document.getElementById('globe-container'));
+            
+            // Auto rotate
+            globe.controls().autoRotate = true;
+            globe.controls().autoRotateSpeed = 0.5;
+            
+            // Hide loading
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hide');
+            }, 1500);
+        }
+        
+        // Show Book Panel
+        function showBookPanel(book) {
+            document.getElementById('bookPanel').classList.add('active');
+            document.getElementById('bookCoverTitle').textContent = book.title;
+            document.getElementById('bookTitle').textContent = book.title;
+            document.getElementById('bookTitleEn').textContent = book.titleEn;
+            document.getElementById('bookAuthor').textContent = book.author;
+            document.getElementById('bookEra').textContent = `${book.era} (${book.year}年)`;
+            document.getElementById('bookChapters').textContent = `${book.chapters}章`;
+            document.getElementById('bookRating').textContent = `⭐ ${book.rating}`;
+            document.getElementById('bookDesc').textContent = book.desc;
+            
+            // Update meta tags
+            const metaHtml = `<span class="book-tag country">${book.flag} ${book.countryZh}</span>` +
+                book.genre.map(g => `<span class="book-tag">${g}</span>`).join('');
+            document.getElementById('bookMeta').innerHTML = metaHtml;
+            
+            // Stop rotation when viewing
+            globe.controls().autoRotate = false;
+        }
+        
+        function closeBookPanel() {
+            document.getElementById('bookPanel').classList.remove('active');
+            globe.controls().autoRotate = true;
+        }
+        
+        // Filter tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                // Filter logic here
+            });
+        });
+        
+        // Search
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const filtered = books.filter(b => 
+                b.title.toLowerCase().includes(query) ||
+                b.titleEn.toLowerCase().includes(query) ||
+                b.author.toLowerCase().includes(query) ||
+                b.countryZh.includes(query)
+            );
+            globe.pointsData(filtered);
+        });
+        
+        // Initialize
+        window.onload = async function() {
+            await loadBooks();
+            initGlobe();
+        };
+    </script>
+</body>
+</html>
