@@ -16,8 +16,7 @@
             --red-glow: rgba(255, 0, 51, 0.5);
             --gold: #ffd700;
             --black: #0a0a0a;
-            --card: #1a1a1a;
-            --card-hover: #252525;
+            --card: rgba(26, 26, 26, 0.95);
             --gray: #333;
             --text: #fff;
             --text-dim: #888;
@@ -25,84 +24,10 @@
         
         body {
             font-family: 'Noto Sans SC', sans-serif;
-            background: var(--black);
+            background: #000;
             color: var(--text);
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        /* Starfield Background */
-        .starfield {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 100%);
-        }
-        
-        .stars, .stars2, .stars3 {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-repeat: repeat;
-        }
-        
-        .stars {
-            background-image: 
-                radial-gradient(2px 2px at 20px 30px, white, transparent),
-                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(1px 1px at 90px 40px, white, transparent),
-                radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent),
-                radial-gradient(1px 1px at 230px 80px, white, transparent),
-                radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
-                radial-gradient(1px 1px at 370px 50px, white, transparent),
-                radial-gradient(2px 2px at 450px 180px, rgba(255,255,255,0.8), transparent);
-            background-size: 500px 200px;
-            animation: twinkle 8s ease-in-out infinite;
-        }
-        
-        .stars2 {
-            background-image: 
-                radial-gradient(1px 1px at 50px 100px, white, transparent),
-                radial-gradient(2px 2px at 100px 50px, rgba(255,200,100,0.8), transparent),
-                radial-gradient(1px 1px at 180px 130px, white, transparent),
-                radial-gradient(1px 1px at 250px 20px, rgba(200,220,255,0.9), transparent),
-                radial-gradient(2px 2px at 320px 90px, white, transparent),
-                radial-gradient(1px 1px at 400px 160px, rgba(255,255,255,0.7), transparent);
-            background-size: 450px 180px;
-            animation: twinkle 12s ease-in-out infinite reverse;
-        }
-        
-        .stars3 {
-            background-image: 
-                radial-gradient(3px 3px at 80px 60px, rgba(255,100,100,0.6), transparent),
-                radial-gradient(2px 2px at 200px 100px, rgba(100,150,255,0.7), transparent),
-                radial-gradient(4px 4px at 350px 40px, rgba(255,200,100,0.5), transparent);
-            background-size: 600px 150px;
-            animation: twinkle 15s ease-in-out infinite;
-        }
-        
-        /* Nebula/Galaxy effect */
-        .nebula {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(ellipse at 20% 30%, rgba(100, 50, 150, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 70%, rgba(50, 100, 150, 0.1) 0%, transparent 40%),
-                radial-gradient(ellipse at 50% 50%, rgba(150, 50, 100, 0.08) 0%, transparent 60%);
-            pointer-events: none;
-        }
-        
-        @keyframes twinkle {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            overflow: hidden;
         }
         
         /* Header */
@@ -112,268 +37,228 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            padding: 15px 30px;
+            padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(180deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0) 100%);
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
         }
         
         .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 28px;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--red) 0%, #ff6666 50%, var(--gold) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px var(--red-glow);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 3px;
         }
         
-        .nav {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-        
-        .nav a {
+        .logo-sub {
+            font-size: 11px;
             color: var(--text-dim);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s;
+            letter-spacing: 1px;
+            margin-top: 2px;
         }
         
-        .nav a:hover { color: var(--red); }
-        
-        .search-box {
+        .header-right {
             display: flex;
             align-items: center;
-            background: rgba(26, 26, 26, 0.8);
-            border: 1px solid var(--gray);
-            border-radius: 25px;
-            padding: 8px 15px;
-            transition: border-color 0.3s;
-            backdrop-filter: blur(10px);
+            gap: 20px;
         }
         
-        .search-box:focus-within { border-color: var(--red); }
-        
-        .search-box input {
+        .search-btn {
             background: none;
             border: none;
             color: var(--text);
-            outline: none;
-            width: 200px;
-            font-size: 14px;
+            font-size: 20px;
+            cursor: pointer;
         }
-        
-        .search-box .icon { color: var(--text-dim); margin-right: 10px; }
         
         /* Globe Container */
         #globe-container {
             width: 100vw;
             height: 100vh;
-            position: relative;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #000 100%);
         }
         
-        /* Book Marker - Title on top, small image below */
-        .book-marker {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* Book Card floating on globe */
+        .book-card {
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 6px;
+            overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 70px;
         }
         
-        .book-marker:hover {
-            transform: scale(1.15);
-            z-index: 100;
+        .book-card:hover {
+            transform: scale(1.1);
+            border-color: var(--red);
+            box-shadow: 0 5px 20px rgba(255,0,51,0.4);
         }
         
-        .book-marker .book-title-label {
+        .book-card img {
+            width: 100%;
+            height: 90px;
+            object-fit: cover;
+        }
+        
+        .book-card .info {
+            padding: 6px;
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .book-card .title {
             font-size: 9px;
-            font-weight: 600;
-            color: var(--gold);
-            background: rgba(0, 0, 0, 0.85);
-            padding: 3px 8px;
-            border-radius: 10px;
-            margin-bottom: 4px;
+            font-weight: 500;
+            color: var(--text);
             white-space: nowrap;
-            max-width: 100px;
             overflow: hidden;
             text-overflow: ellipsis;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            border: 1px solid rgba(255, 215, 0, 0.3);
         }
         
-        .book-marker .book-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 2px solid var(--red);
-            box-shadow: 0 4px 15px rgba(255, 0, 51, 0.4);
+        .book-card .rating {
+            font-size: 8px;
+            color: var(--gold);
+            margin-top: 2px;
+        }
+        
+        /* Country Label */
+        .country-label {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .country-label.show {
+            opacity: 1;
+        }
+        
+        .country-label .name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            color: var(--text);
+            text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+        }
+        
+        .country-label .name-zh {
+            font-size: 16px;
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+        
+        /* Bottom Detail Panel */
+        .detail-panel {
+            position: fixed;
+            bottom: -250px;
+            left: 20px;
+            right: 20px;
+            height: 230px;
             background: var(--card);
+            backdrop-filter: blur(20px);
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            z-index: 1000;
+            transition: bottom 0.4s ease;
+            display: flex;
+            gap: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .book-marker .book-image img {
+        .detail-panel.show {
+            bottom: 0;
+        }
+        
+        .detail-cover {
+            width: 140px;
+            height: 190px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        
+        .detail-cover img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
         
-        .book-marker .cover-fallback {
-            width: 100%;
-            height: 100%;
+        .detail-info {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .detail-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .detail-meta {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            background: linear-gradient(135deg, var(--red-dark) 0%, var(--black) 100%);
+            gap: 15px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
         }
         
-        /* Stats Overlay */
-        .stats-overlay {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            display: flex;
-            gap: 20px;
+        .detail-year {
+            color: var(--text-dim);
+            font-size: 14px;
         }
         
-        .stat-card {
-            background: rgba(26, 26, 26, 0.9);
-            border: 1px solid var(--gray);
-            border-radius: 12px;
-            padding: 15px 25px;
-            backdrop-filter: blur(10px);
+        .detail-rating {
+            color: var(--gold);
+            font-size: 14px;
         }
         
-        .stat-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 32px;
+        .detail-author {
             color: var(--red);
-            line-height: 1;
+            font-size: 14px;
         }
         
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-dim);
-            margin-top: 5px;
-        }
-        
-        /* Culture Filter (left side) */
-        .culture-filter {
-            position: fixed;
-            left: 30px;
-            top: 50%;
-            transform: translateY(-50%);
+        .detail-tags {
             display: flex;
-            flex-direction: column;
             gap: 8px;
-            background: rgba(26, 26, 26, 0.9);
-            padding: 15px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--gray);
-            z-index: 100;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
         }
         
-        .culture-btn {
-            width: 45px;
-            height: 45px;
+        .detail-tag {
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.1);
             border-radius: 12px;
-            background: var(--black);
-            border: 1px solid var(--gray);
-            color: var(--text);
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .culture-btn:hover {
-            border-color: var(--red);
-            transform: scale(1.1);
-        }
-        
-        .culture-btn.active {
-            background: var(--red);
-            border-color: var(--red);
-            box-shadow: 0 0 15px var(--red-glow);
-        }
-        
-        .culture-btn .tooltip {
-            position: absolute;
-            left: 60px;
-            background: var(--card);
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        
-        .culture-btn:hover .tooltip {
-            opacity: 1;
-        }
-        
-        /* Filter Tabs (bottom) */
-        .filter-tabs {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            background: rgba(26, 26, 26, 0.9);
-            padding: 10px;
-            border-radius: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--gray);
-        }
-        
-        .filter-tab {
-            padding: 10px 18px;
-            border-radius: 20px;
-            background: none;
-            border: none;
+            font-size: 11px;
             color: var(--text-dim);
-            cursor: pointer;
+        }
+        
+        .detail-desc {
             font-size: 13px;
-            transition: all 0.3s;
+            line-height: 1.6;
+            color: var(--text-dim);
+            max-height: 60px;
+            overflow: hidden;
         }
         
-        .filter-tab:hover { color: var(--text); }
-        .filter-tab.active {
-            background: var(--red);
-            color: var(--text);
+        .detail-developer {
+            margin-top: 10px;
+            font-size: 11px;
+            color: var(--text-dim);
         }
         
-        /* Book Panel */
-        .book-panel {
-            position: fixed;
-            right: -500px;
-            top: 0;
-            width: 500px;
-            height: 100vh;
-            background: rgba(26, 26, 26, 0.95);
-            border-left: 1px solid var(--gray);
-            padding: 30px;
-            overflow-y: auto;
-            transition: right 0.4s ease;
-            z-index: 999;
-            backdrop-filter: blur(20px);
+        .detail-developer span {
+            color: var(--red);
         }
         
-        .book-panel.active { right: 0; }
-        
-        .book-panel .close-btn {
+        .detail-close {
             position: absolute;
-            top: 20px;
+            top: 15px;
             right: 20px;
             background: none;
             border: none;
@@ -382,129 +267,142 @@
             cursor: pointer;
         }
         
-        .book-cover-large {
-            width: 100%;
-            height: 280px;
-            background: linear-gradient(135deg, var(--gray) 0%, var(--black) 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            border: 1px solid var(--gray);
-            overflow: hidden;
-        }
-        
-        .book-cover-large img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .book-cover-large .title-preview {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
-            color: var(--red);
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .book-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        
-        .book-title-en {
-            font-size: 14px;
-            color: var(--text-dim);
-            margin-bottom: 15px;
-        }
-        
-        .book-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .book-tag {
-            padding: 5px 12px;
-            background: var(--black);
-            border: 1px solid var(--gray);
-            border-radius: 15px;
-            font-size: 12px;
-            color: var(--text-dim);
-        }
-        
-        .book-tag.country {
-            border-color: var(--red);
-            color: var(--red);
-        }
-        
-        .book-tag.culture {
-            border-color: var(--gold);
-            color: var(--gold);
-        }
-        
-        .book-info {
-            margin-bottom: 20px;
-        }
-        
-        .book-info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--gray);
-        }
-        
-        .book-info-label { color: var(--text-dim); }
-        .book-info-value { color: var(--text); }
-        
-        .book-desc {
-            line-height: 1.8;
-            color: var(--text-dim);
-            margin-bottom: 20px;
-        }
-        
-        .book-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .btn {
-            padding: 15px 25px;
-            border-radius: 12px;
-            font-size: 14px;
+        .detail-action {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
-            text-align: center;
-            text-decoration: none;
         }
         
-        .btn-primary {
-            background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+        .detail-action:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px var(--red-glow);
+        }
+        
+        /* Right Side Panel - Country Books */
+        .side-panel {
+            position: fixed;
+            right: -320px;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            z-index: 900;
+            transition: right 0.4s ease;
+            padding: 80px 15px 20px;
+            overflow-y: auto;
+            border-left: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .side-panel.show {
+            right: 0;
+        }
+        
+        .side-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .side-panel-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .side-panel-close {
+            background: none;
             border: none;
-            color: var(--text);
-            box-shadow: 0 4px 15px var(--red-glow);
+            color: var(--text-dim);
+            font-size: 20px;
+            cursor: pointer;
         }
         
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--red-glow);
+        .side-panel-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
         }
         
-        .btn-secondary {
-            background: var(--black);
-            border: 1px solid var(--gray);
-            color: var(--text);
+        .side-stat {
+            text-align: center;
         }
         
-        .btn-secondary:hover {
-            border-color: var(--red);
+        .side-stat-value {
+            font-size: 20px;
+            font-weight: 700;
             color: var(--red);
+        }
+        
+        .side-stat-label {
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+        
+        .side-books {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .side-book {
+            background: rgba(0,0,0,0.3);
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .side-book:hover {
+            transform: scale(1.05);
+            box-shadow: 0 3px 15px rgba(255,0,51,0.3);
+        }
+        
+        .side-book img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+        }
+        
+        .side-book .rating {
+            padding: 4px;
+            font-size: 10px;
+            color: var(--gold);
+            text-align: center;
+        }
+        
+        /* Stats Footer */
+        .stats-footer {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: var(--text);
+        }
+        
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-dim);
         }
         
         /* Loading */
@@ -514,45 +412,42 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: var(--black);
+            background: #000;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            transition: opacity 0.5s;
         }
         
         .loading.hide {
             opacity: 0;
             pointer-events: none;
+            transition: opacity 0.5s;
         }
         
-        .loading-text {
+        .loading-logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 28px;
-            background: linear-gradient(135deg, var(--red) 0%, var(--gold) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-top: 20px;
+            font-size: 32px;
+            color: var(--text);
+            letter-spacing: 5px;
         }
         
         .loading-bar {
-            width: 200px;
-            height: 3px;
+            width: 150px;
+            height: 2px;
             background: var(--gray);
-            border-radius: 2px;
-            margin-top: 15px;
+            margin-top: 20px;
             overflow: hidden;
         }
         
         .loading-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--red), var(--gold));
-            animation: loading 1.5s ease-in-out infinite;
+            background: var(--red);
+            animation: load 1.5s ease-in-out infinite;
         }
         
-        @keyframes loading {
+        @keyframes load {
             0% { width: 0; margin-left: 0; }
             50% { width: 100%; margin-left: 0; }
             100% { width: 0; margin-left: 100%; }
@@ -560,383 +455,312 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            .header { padding: 10px 15px; }
-            .logo { font-size: 20px; }
-            .nav { display: none; }
-            .stats-overlay { flex-direction: column; left: 15px; bottom: 100px; }
-            .filter-tabs { width: 90%; overflow-x: auto; }
-            .book-panel { width: 100%; }
-            .culture-filter { left: 10px; padding: 10px; }
-            .culture-btn { width: 35px; height: 35px; font-size: 16px; }
-            .book-marker .book-title-label { font-size: 7px; max-width: 60px; }
-            .book-marker .book-image { width: 35px; height: 35px; }
+            .detail-panel { 
+                flex-direction: column; 
+                height: auto;
+                max-height: 70vh;
+            }
+            .detail-cover { 
+                width: 100px; 
+                height: 140px; 
+            }
+            .side-panel { width: 100%; right: -100%; }
+            .book-card { width: 50px; }
+            .book-card img { height: 65px; }
+            .book-card .info { padding: 4px; }
+            .book-card .title { font-size: 7px; }
         }
     </style>
 </head>
 <body>
-    <!-- Starfield Background -->
-    <div class="starfield">
-        <div class="stars"></div>
-        <div class="stars2"></div>
-        <div class="stars3"></div>
-        <div class="nebula"></div>
-    </div>
-    
-    <!-- Loading Screen -->
+    <!-- Loading -->
     <div class="loading" id="loading">
-        <div class="loading-text">FIZZGLOBE</div>
+        <div class="loading-logo">FIZZGLOBE</div>
         <div class="loading-bar"><div class="loading-bar-fill"></div></div>
     </div>
     
     <!-- Header -->
     <header class="header">
-        <div class="logo">FIZZGLOBE</div>
-        <nav class="nav">
-            <a href="#">🔥 热门</a>
-            <a href="#">🌏 地区</a>
-            <a href="#">📚 分类</a>
-        </nav>
-        <div class="search-box">
-            <span class="icon">🔍</span>
-            <input type="text" placeholder="搜索故事、作者、国家..." id="searchInput">
+        <div>
+            <div class="logo">FIZZGLOBE</div>
+            <div class="logo-sub" id="statsText">1000 books · 50 countries</div>
+        </div>
+        <div class="header-right">
+            <button class="search-btn" onclick="toggleSearch()">🔍</button>
         </div>
     </header>
     
-    <!-- Culture Filter (Left Side) -->
-    <div class="culture-filter">
-        <button class="culture-btn active" data-culture="all" title="全部">
-            🌍
-            <span class="tooltip">全部文化</span>
-        </button>
-        <button class="culture-btn" data-culture="east-asia" title="东亚">
-            🏯
-            <span class="tooltip">东亚文化</span>
-        </button>
-        <button class="culture-btn" data-culture="south-asia" title="南亚">
-            🕉️
-            <span class="tooltip">南亚文化</span>
-        </button>
-        <button class="culture-btn" data-culture="middle-east" title="中东">
-            🕌
-            <span class="tooltip">中东文化</span>
-        </button>
-        <button class="culture-btn" data-culture="europe" title="欧洲">
-            🏰
-            <span class="tooltip">欧洲文化</span>
-        </button>
-        <button class="culture-btn" data-culture="americas" title="美洲">
-            🗽
-            <span class="tooltip">美洲文化</span>
-        </button>
-        <button class="culture-btn" data-culture="africa" title="非洲">
-            🌍
-            <span class="tooltip">非洲文化</span>
-        </button>
-        <button class="culture-btn" data-culture="oceania" title="大洋洲">
-            🏝️
-            <span class="tooltip">大洋洲文化</span>
-        </button>
+    <!-- Country Label -->
+    <div class="country-label" id="countryLabel">
+        <div class="name" id="countryName">France</div>
+        <div class="name-zh" id="countryNameZh">法国</div>
     </div>
     
     <!-- Globe -->
     <div id="globe-container"></div>
     
-    <!-- Stats Overlay -->
-    <div class="stats-overlay">
-        <div class="stat-card">
+    <!-- Stats Footer -->
+    <div class="stats-footer" id="statsFooter">
+        <div class="stat-item">
             <div class="stat-value" id="totalBooks">0</div>
-            <div class="stat-label">经典作品</div>
+            <div class="stat-label">books</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-item">
             <div class="stat-value" id="totalCountries">0</div>
-            <div class="stat-label">国家地区</div>
+            <div class="stat-label">countries</div>
         </div>
     </div>
     
-    <!-- Filter Tabs (Bottom - Genre) -->
-    <div class="filter-tabs">
-        <button class="filter-tab active" data-filter="all">🌍 全部</button>
-        <button class="filter-tab" data-filter="小说">📚 小说</button>
-        <button class="filter-tab" data-filter="神话">👻 神话</button>
-        <button class="filter-tab" data-filter="历史">🏛️ 历史</button>
-        <button class="filter-tab" data-filter="诗歌">📜 诗歌</button>
-        <button class="filter-tab" data-filter="戏剧">🎭 戏剧</button>
-        <button class="filter-tab" data-filter="哲学">🤔 哲学</button>
+    <!-- Bottom Detail Panel -->
+    <div class="detail-panel" id="detailPanel">
+        <button class="detail-close" onclick="closeDetail()">✕</button>
+        <div class="detail-cover">
+            <img id="detailCover" src="" alt="">
+        </div>
+        <div class="detail-info">
+            <div class="detail-title" id="detailTitle">书名</div>
+            <div class="detail-meta">
+                <span class="detail-year" id="detailYear">1900</span>
+                <span class="detail-rating" id="detailRating">★ 9.0</span>
+                <span class="detail-author" id="detailAuthor">作者</span>
+            </div>
+            <div class="detail-tags" id="detailTags"></div>
+            <div class="detail-desc" id="detailDesc">简介内容...</div>
+            <div class="detail-developer">开发者: <span>FizzDragon AI</span></div>
+        </div>
+        <button class="detail-action" onclick="generateDrama()">🎬 生成AI番剧</button>
     </div>
     
-    <!-- Book Panel -->
-    <div class="book-panel" id="bookPanel">
-        <button class="close-btn" onclick="closeBookPanel()">✕</button>
-        <div class="book-cover-large" id="bookCoverLarge">
-            <div class="title-preview" id="bookCoverTitle">西游记</div>
+    <!-- Side Panel -->
+    <div class="side-panel" id="sidePanel">
+        <div class="side-panel-header">
+            <span class="side-panel-title" id="sidePanelTitle">国家</span>
+            <button class="side-panel-close" onclick="closeSidePanel()">✕</button>
         </div>
-        <h1 class="book-title" id="bookTitle">西游记</h1>
-        <div class="book-title-en" id="bookTitleEn">Journey to the West</div>
-        <div class="book-meta" id="bookMeta">
-            <span class="book-tag country">🇨🇳 中国</span>
-            <span class="book-tag">神话</span>
-        </div>
-        <div class="book-info">
-            <div class="book-info-row">
-                <span class="book-info-label">作者</span>
-                <span class="book-info-value" id="bookAuthor">吴承恩</span>
+        <div class="side-panel-stats">
+            <div class="side-stat">
+                <div class="side-stat-value" id="sideBookCount">0</div>
+                <div class="side-stat-label">books</div>
             </div>
-            <div class="book-info-row">
-                <span class="book-info-label">年代</span>
-                <span class="book-info-value" id="bookEra">明代 (约1592年)</span>
-            </div>
-            <div class="book-info-row">
-                <span class="book-info-label">章节</span>
-                <span class="book-info-value" id="bookChapters">100回</span>
-            </div>
-            <div class="book-info-row">
-                <span class="book-info-label">评分</span>
-                <span class="book-info-value" id="bookRating">⭐ 9.5</span>
+            <div class="side-stat">
+                <div class="side-stat-value" id="sideAvgRating">0</div>
+                <div class="side-stat-label">avg rating</div>
             </div>
         </div>
-        <p class="book-desc" id="bookDesc">
-            讲述孙悟空、猪八戒、沙僧保护唐僧西行取经，历经九九八十一难的神话故事。
-        </p>
-        <div class="book-actions">
-            <button class="btn btn-primary" onclick="generateDrama()">🎬 生成 AI 番剧</button>
-            <button class="btn btn-secondary" id="wikiLink">🔗 查看维基百科</button>
-        </div>
+        <div class="side-books" id="sideBooks"></div>
     </div>
     
     <script>
-        // Book Data
         let books = [];
-        let currentCulture = 'all';
-        let currentGenre = 'all';
         let globe;
+        let currentBook = null;
         
-        // Country to culture mapping
-        const countryCulture = {
-            'China': 'east-asia', '中国': 'east-asia',
-            'Japan': 'east-asia', '日本': 'east-asia',
-            'Korea': 'east-asia', '韩国': 'east-asia',
-            'Vietnam': 'east-asia', '越南': 'east-asia',
-            'India': 'south-asia', '印度': 'south-asia',
-            'Pakistan': 'south-asia', 'Bangladesh': 'south-asia',
-            'Sri Lanka': 'south-asia', 'Nepal': 'south-asia',
-            'Iran': 'middle-east', 'Persia': 'middle-east', '波斯': 'middle-east',
-            'Iraq': 'middle-east', 'Arabia': 'middle-east', '阿拉伯': 'middle-east',
-            'Turkey': 'middle-east', 'Egypt': 'middle-east', '埃及': 'middle-east',
-            'Israel': 'middle-east', 'Lebanon': 'middle-east', 'Syria': 'middle-east',
-            'United Kingdom': 'europe', 'UK': 'europe', '英国': 'europe',
-            'France': 'europe', '法国': 'europe',
-            'Germany': 'europe', '德国': 'europe',
-            'Italy': 'europe', '意大利': 'europe',
-            'Spain': 'europe', '西班牙': 'europe',
-            'Russia': 'europe', '俄罗斯': 'europe', '俄国': 'europe',
-            'Greece': 'europe', 'Ancient Greece': 'europe', '古希腊': 'europe', '希腊': 'europe',
-            'Norway': 'europe', 'Sweden': 'europe', 'Denmark': 'europe', 'Iceland': 'europe',
-            'Netherlands': 'europe', 'Belgium': 'europe', 'Switzerland': 'europe',
-            'Austria': 'europe', 'Poland': 'europe', 'Czech Republic': 'europe',
-            'Hungary': 'europe', 'Portugal': 'europe', 'Ireland': 'europe',
-            'United States': 'americas', 'USA': 'americas', '美国': 'americas',
-            'Canada': 'americas', 'Mexico': 'americas', '墨西哥': 'americas',
-            'Brazil': 'americas', '巴西': 'americas',
-            'Argentina': 'americas', '阿根廷': 'americas',
-            'Colombia': 'americas', 'Chile': 'americas', 'Peru': 'americas', 'Cuba': 'americas',
-            'Nigeria': 'africa', 'South Africa': 'africa', '南非': 'africa',
-            'Kenya': 'africa', 'Ethiopia': 'africa', 'Ghana': 'africa',
-            'Morocco': 'africa', 'Algeria': 'africa', 'Tunisia': 'africa',
-            'Australia': 'oceania', '澳大利亚': 'oceania',
-            'New Zealand': 'oceania', '新西兰': 'oceania'
-        };
-        
-        // Country flags mapping
+        // Country flags
         const countryFlags = {
-            'China': '🇨🇳', '中国': '🇨🇳',
-            'Japan': '🇯🇵', '日本': '🇯🇵',
-            'Korea': '🇰🇷', '韩国': '🇰🇷',
-            'Russia': '🇷🇺', '俄罗斯': '🇷🇺', '俄国': '🇷🇺',
-            'France': '🇫🇷', '法国': '🇫🇷',
+            'China': '🇨🇳', '中国': '🇨🇳', 'Japan': '🇯🇵', '日本': '🇯🇵',
+            'Russia': '🇷🇺', '俄罗斯': '🇷🇺', 'France': '🇫🇷', '法国': '🇫🇷',
             'United Kingdom': '🇬🇧', 'UK': '🇬🇧', '英国': '🇬🇧',
-            'Germany': '🇩🇪', '德国': '🇩🇪',
-            'Italy': '🇮🇹', '意大利': '🇮🇹',
-            'Spain': '🇪🇸', '西班牙': '🇪🇸',
-            'Greece': '🇬🇷', '希腊': '🇬🇷', 'Ancient Greece': '🏛️', '古希腊': '🏛️',
-            'India': '🇮🇳', '印度': '🇮🇳',
-            'Iran': '🇮🇷', 'Persia': '🇮🇷', '波斯': '🇮🇷',
-            'Egypt': '🇪🇬', '埃及': '🇪🇬',
-            'United States': '🇺🇸', 'USA': '🇺🇸', '美国': '🇺🇸',
-            'Brazil': '🇧🇷', '巴西': '🇧🇷',
-            'Argentina': '🇦🇷', '阿根廷': '🇦🇷',
-            'Mexico': '🇲🇽', '墨西哥': '🇲🇽',
-            'Nigeria': '🇳🇬', 'South Africa': '🇿🇦',
-            'Australia': '🇦🇺', '澳大利亚': '🇦🇺',
-            'Norway': '🇳🇴', 'Sweden': '🇸🇪', 'Denmark': '🇩🇰', 'Iceland': '🇮🇸',
-            'Arabia': '🇸🇦', '阿拉伯': '🇸🇦',
-            'Turkey': '🇹🇷', 'Vietnam': '🇻🇳', '越南': '🇻🇳'
+            'Germany': '🇩🇪', '德国': '🇩🇪', 'Italy': '🇮🇹', '意大利': '🇮🇹',
+            'Spain': '🇪🇸', '西班牙': '🇪🇸', 'Greece': '🇬🇷', '希腊': '🇬🇷',
+            'India': '🇮🇳', '印度': '🇮🇳', 'USA': '🇺🇸', '美国': '🇺🇸'
         };
         
-        // Transform JSON data
+        // Transform book data
         function transformBook(b) {
-            const country = b.country || b.country_zh || '';
             return {
                 id: b.id,
                 title: b.title_original || b.title || '',
                 titleEn: b.title_english || b.titleEn || '',
                 author: b.author || '',
-                country: country,
-                countryZh: b.country_zh || b.countryZh || country,
-                flag: countryFlags[country] || '🌍',
-                culture: countryCulture[country] || 'other',
+                country: b.country || '',
+                countryZh: b.country_zh || b.countryZh || b.country || '',
                 lat: b.lat || 0,
                 lng: b.lng || 0,
                 rating: b.rating || 8.5,
                 genre: b.genre || [],
-                era: b.era || '',
                 year: b.year_published || b.year || 0,
-                chapters: b.chapters || 0,
                 desc: b.description_zh || b.description_en || b.desc || '',
-                image: b.image_url || b.image || null,
-                wiki: b.wiki_url || null
+                image: b.image_url || null
             };
         }
         
-        // Get book image (use Wikipedia or placeholder)
+        // Get book image
         function getBookImage(book) {
             if (book.image) return book.image;
-            // Use picsum with book-specific seed for consistent images
-            const seed = book.id + (book.title ? book.title.charCodeAt(0) : 0);
-            return `https://picsum.photos/seed/${seed}/200/200`;
+            return `https://picsum.photos/seed/${book.id}/200/280`;
         }
         
-        // Load books from JSON
+        // Load books
         async function loadBooks() {
             try {
                 const response = await fetch('./data/books.json');
                 const data = await response.json();
                 books = (data.books || data).map(transformBook);
+                
+                // Update stats
                 document.getElementById('totalBooks').textContent = books.length;
                 const countries = new Set(books.map(b => b.country).filter(c => c));
                 document.getElementById('totalCountries').textContent = countries.size;
+                document.getElementById('statsText').textContent = `${books.length} books · ${countries.size} countries`;
+                
                 return books;
-            } catch (error) {
-                console.error('Failed to load books:', error);
+            } catch (e) {
+                console.error('Load error:', e);
                 return [];
             }
         }
         
-        // Create book marker element (title on top, image below)
-        function createBookMarker(book) {
+        // Create book card element
+        function createBookCard(book) {
             const el = document.createElement('div');
-            el.className = 'book-marker';
+            el.className = 'book-card';
             el.innerHTML = `
-                <div class="book-title-label">${book.title}</div>
-                <div class="book-image">
-                    <img src="${getBookImage(book)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="${book.title}">
-                    <div class="cover-fallback" style="display:none;">${book.flag}</div>
+                <img src="${getBookImage(book)}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/70x90/333/fff?text=${encodeURIComponent(book.title.charAt(0))}'">
+                <div class="info">
+                    <div class="title">${book.title}</div>
+                    <div class="rating">★ ${book.rating}</div>
                 </div>
             `;
-            el.onclick = () => showBookPanel(book);
+            el.onclick = () => showDetail(book);
             return el;
         }
         
-        // Filter books by culture and genre, with density control
-        let displayDensity = 0.15; // Show 15% of books by default to reduce clutter
-        
-        function filterBooks() {
-            let filtered = books.filter(b => {
-                const cultureMatch = currentCulture === 'all' || b.culture === currentCulture;
-                const genreMatch = currentGenre === 'all' || (b.genre && b.genre.includes(currentGenre));
-                return cultureMatch && genreMatch;
-            });
+        // Show book detail
+        function showDetail(book) {
+            currentBook = book;
+            document.getElementById('detailCover').src = getBookImage(book);
+            document.getElementById('detailTitle').textContent = book.title;
+            document.getElementById('detailYear').textContent = book.year || '-';
+            document.getElementById('detailRating').textContent = `★ ${book.rating}`;
+            document.getElementById('detailAuthor').textContent = book.author;
+            document.getElementById('detailDesc').textContent = book.desc || '暂无简介';
             
-            // If showing all and too many books, sample to reduce density
-            if (currentCulture === 'all' && currentGenre === 'all' && filtered.length > 100) {
-                // Keep top-rated books + random sample
-                const topBooks = filtered.filter(b => b.rating >= 9.0);
-                const otherBooks = filtered.filter(b => b.rating < 9.0);
-                const sampleSize = Math.floor(otherBooks.length * displayDensity);
-                const sampled = otherBooks.sort(() => 0.5 - Math.random()).slice(0, sampleSize);
-                filtered = [...topBooks, ...sampled];
+            // Tags
+            const tagsEl = document.getElementById('detailTags');
+            tagsEl.innerHTML = '';
+            if (book.countryZh) {
+                tagsEl.innerHTML += `<span class="detail-tag">${countryFlags[book.country] || '🌍'} ${book.countryZh}</span>`;
+            }
+            if (book.genre && book.genre.length) {
+                book.genre.slice(0, 3).forEach(g => {
+                    tagsEl.innerHTML += `<span class="detail-tag">${g}</span>`;
+                });
             }
             
-            return filtered;
+            document.getElementById('detailPanel').classList.add('show');
+            document.getElementById('statsFooter').style.display = 'none';
+            globe.controls().autoRotate = false;
+            
+            // Show country label
+            if (book.country) {
+                document.getElementById('countryName').textContent = book.country;
+                document.getElementById('countryNameZh').textContent = book.countryZh;
+                document.getElementById('countryLabel').classList.add('show');
+            }
         }
         
-        // Sun and Moon related books (special category)
-        const celestialBooks = [
-            { id: 9001, title: "后羿射日", titleEn: "Hou Yi Shoots the Suns", author: "中国神话", country: "China", countryZh: "中国", flag: "🇨🇳", culture: "east-asia", lat: 34.26, lng: 108.95, rating: 9.5, genre: ["神话"], era: "远古", year: -2000, desc: "后羿射下九个太阳，拯救人类的神话故事。", celestial: "sun" },
-            { id: 9002, title: "嫦娥奔月", titleEn: "Chang'e Flies to the Moon", author: "中国神话", country: "China", countryZh: "中国", flag: "🇨🇳", culture: "east-asia", lat: 39.90, lng: 116.40, rating: 9.5, genre: ["神话"], era: "远古", year: -2000, desc: "嫦娥偷吃仙丹飞向月亮的故事。", celestial: "moon" },
-            { id: 9003, title: "天照大神", titleEn: "Amaterasu", author: "日本神话", country: "Japan", countryZh: "日本", flag: "🇯🇵", culture: "east-asia", lat: 34.69, lng: 135.50, rating: 9.3, genre: ["神话"], era: "古代", year: 712, desc: "日本太阳女神天照大神的神话。", celestial: "sun" },
-            { id: 9004, title: "月读命", titleEn: "Tsukuyomi", author: "日本神话", country: "Japan", countryZh: "日本", flag: "🇯🇵", culture: "east-asia", lat: 35.01, lng: 135.76, rating: 9.0, genre: ["神话"], era: "古代", year: 712, desc: "日本月亮之神月读命的故事。", celestial: "moon" },
-            { id: 9005, title: "太阳神拉", titleEn: "Ra - The Sun God", author: "埃及神话", country: "Egypt", countryZh: "埃及", flag: "🇪🇬", culture: "middle-east", lat: 29.98, lng: 31.13, rating: 9.4, genre: ["神话"], era: "古代", year: -3000, desc: "埃及太阳神拉的神话故事。", celestial: "sun" },
-            { id: 9006, title: "阿波罗", titleEn: "Apollo - God of Sun", author: "希腊神话", country: "Greece", countryZh: "希腊", flag: "🇬🇷", culture: "europe", lat: 37.97, lng: 23.72, rating: 9.3, genre: ["神话"], era: "古代", year: -800, desc: "希腊太阳神阿波罗的神话。", celestial: "sun" },
-            { id: 9007, title: "阿尔忒弥斯", titleEn: "Artemis - Goddess of Moon", author: "希腊神话", country: "Greece", countryZh: "希腊", flag: "🇬🇷", culture: "europe", lat: 37.97, lng: 23.72, rating: 9.2, genre: ["神话"], era: "古代", year: -800, desc: "希腊月亮女神阿尔忒弥斯的神话。", celestial: "moon" },
-            { id: 9008, title: "苏利耶", titleEn: "Surya - Hindu Sun God", author: "印度神话", country: "India", countryZh: "印度", flag: "🇮🇳", culture: "south-asia", lat: 28.61, lng: 77.23, rating: 9.1, genre: ["神话"], era: "古代", year: -1500, desc: "印度太阳神苏利耶的故事。", celestial: "sun" }
-        ];
+        function closeDetail() {
+            document.getElementById('detailPanel').classList.remove('show');
+            document.getElementById('statsFooter').style.display = 'flex';
+            document.getElementById('countryLabel').classList.remove('show');
+            globe.controls().autoRotate = true;
+        }
         
-        // Add celestial books to main array on load
-        function addCelestialBooks() {
-            celestialBooks.forEach(cb => {
-                if (!books.find(b => b.id === cb.id)) {
-                    books.push(cb);
-                }
+        // Show side panel with country books
+        function showCountryBooks(country) {
+            const countryBooks = books.filter(b => b.country === country || b.countryZh === country);
+            if (countryBooks.length === 0) return;
+            
+            document.getElementById('sidePanelTitle').textContent = `${countryFlags[country] || '🌍'} ${country}`;
+            document.getElementById('sideBookCount').textContent = countryBooks.length;
+            
+            const avgRating = (countryBooks.reduce((sum, b) => sum + b.rating, 0) / countryBooks.length).toFixed(1);
+            document.getElementById('sideAvgRating').textContent = avgRating;
+            
+            const booksEl = document.getElementById('sideBooks');
+            booksEl.innerHTML = '';
+            countryBooks.forEach(book => {
+                const el = document.createElement('div');
+                el.className = 'side-book';
+                el.innerHTML = `
+                    <img src="${getBookImage(book)}" alt="${book.title}">
+                    <div class="rating">★ ${book.rating}</div>
+                `;
+                el.onclick = () => showDetail(book);
+                booksEl.appendChild(el);
             });
+            
+            document.getElementById('sidePanel').classList.add('show');
         }
         
-        // Initialize Globe with enhanced starfield background
+        function closeSidePanel() {
+            document.getElementById('sidePanel').classList.remove('show');
+        }
+        
+        function generateDrama() {
+            if (currentBook) {
+                alert(`🎬 即将为《${currentBook.title}》生成AI番剧分镜！\n\n功能开发中...`);
+            }
+        }
+        
+        function toggleSearch() {
+            const query = prompt('搜索书名、作者或国家:');
+            if (query) {
+                const results = books.filter(b => 
+                    b.title.includes(query) || 
+                    b.author.includes(query) ||
+                    b.countryZh.includes(query)
+                );
+                if (results.length > 0) {
+                    showDetail(results[0]);
+                } else {
+                    alert('未找到相关书籍');
+                }
+            }
+        }
+        
+        // Initialize globe
         function initGlobe() {
-            const filteredBooks = filterBooks();
+            // Sample books for display (show fewer to reduce clutter)
+            const displayBooks = books
+                .sort((a, b) => b.rating - a.rating)
+                .slice(0, 80); // Only show top 80 by rating
             
             globe = Globe()
                 .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
                 .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
-                .backgroundImageUrl('')  // Use CSS starfield instead
+                .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
                 .atmosphereColor('#4488ff')
-                .atmosphereAltitude(0.2)
-                .htmlElementsData(filteredBooks)
+                .atmosphereAltitude(0.25)
+                .htmlElementsData(displayBooks)
                 .htmlLat('lat')
                 .htmlLng('lng')
-                .htmlAltitude(0.02)
-                .htmlElement(createBookMarker)
+                .htmlAltitude(0.03)
+                .htmlElement(createBookCard)
                 (document.getElementById('globe-container'));
             
-            // Make globe more visible - SLOWER rotation
+            // Slow rotation
             globe.controls().autoRotate = true;
-            globe.controls().autoRotateSpeed = 0.05;  // Very slow, gentle rotation
+            globe.controls().autoRotateSpeed = 0.08;
             
-            // Add ambient light
+            // Add lights
             const scene = globe.scene();
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
+            scene.add(new THREE.AmbientLight(0xffffff, 0.5));
             
-            // Add Sun
-            const sunGeometry = new THREE.SphereGeometry(8, 32, 32);
-            const sunMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0xffdd00,
-                transparent: true,
-                opacity: 0.9
-            });
-            const sun = new THREE.Mesh(sunGeometry, sunMaterial);
-            sun.position.set(200, 80, -100);
+            // Sun
+            const sunGeo = new THREE.SphereGeometry(10, 32, 32);
+            const sunMat = new THREE.MeshBasicMaterial({ color: 0xffdd00 });
+            const sun = new THREE.Mesh(sunGeo, sunMat);
+            sun.position.set(250, 100, -150);
             scene.add(sun);
+            scene.add(new THREE.PointLight(0xffdd00, 1, 600));
             
-            // Sun glow
-            const sunGlow = new THREE.PointLight(0xffdd00, 1.5, 500);
-            sunGlow.position.copy(sun.position);
-            scene.add(sunGlow);
-            
-            // Add Moon
-            const moonGeometry = new THREE.SphereGeometry(3, 32, 32);
-            const moonMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0xcccccc,
-                transparent: true,
-                opacity: 0.9
-            });
-            const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-            moon.position.set(-150, 50, 80);
+            // Moon  
+            const moonGeo = new THREE.SphereGeometry(4, 32, 32);
+            const moonMat = new THREE.MeshBasicMaterial({ color: 0xcccccc });
+            const moon = new THREE.Mesh(moonGeo, moonMat);
+            moon.position.set(-180, 60, 100);
             scene.add(moon);
-            
-            // Moon glow
-            const moonGlow = new THREE.PointLight(0x8888ff, 0.5, 200);
-            moonGlow.position.copy(moon.position);
-            scene.add(moonGlow);
             
             // Hide loading
             setTimeout(() => {
@@ -944,110 +768,9 @@
             }, 1500);
         }
         
-        // Update globe data
-        function updateGlobe() {
-            const filteredBooks = filterBooks();
-            globe.htmlElementsData(filteredBooks);
-        }
-        
-        // Show Book Panel
-        function showBookPanel(book) {
-            const panel = document.getElementById('bookPanel');
-            panel.classList.add('active');
-            
-            const coverEl = document.getElementById('bookCoverLarge');
-            coverEl.innerHTML = `<img src="${getBookImage(book)}" onerror="this.outerHTML='<div class=\\'title-preview\\'>${book.title}</div>'" alt="${book.title}">`;
-            
-            document.getElementById('bookTitle').textContent = book.title;
-            document.getElementById('bookTitleEn').textContent = book.titleEn;
-            document.getElementById('bookAuthor').textContent = book.author;
-            document.getElementById('bookEra').textContent = book.era ? `${book.era} (${book.year}年)` : (book.year ? `${book.year}年` : '-');
-            document.getElementById('bookChapters').textContent = book.chapters ? `${book.chapters}章/回` : '-';
-            document.getElementById('bookRating').textContent = `⭐ ${book.rating}`;
-            document.getElementById('bookDesc').textContent = book.desc || '暂无简介';
-            
-            // Culture names
-            const cultureNames = {
-                'east-asia': '东亚文化',
-                'south-asia': '南亚文化',
-                'middle-east': '中东文化',
-                'europe': '欧洲文化',
-                'americas': '美洲文化',
-                'africa': '非洲文化',
-                'oceania': '大洋洲文化'
-            };
-            
-            let metaHtml = `<span class="book-tag country">${book.flag} ${book.countryZh}</span>`;
-            if (book.culture && cultureNames[book.culture]) {
-                metaHtml += `<span class="book-tag culture">🌐 ${cultureNames[book.culture]}</span>`;
-            }
-            if (book.genre) {
-                book.genre.slice(0, 3).forEach(g => {
-                    metaHtml += `<span class="book-tag">${g}</span>`;
-                });
-            }
-            document.getElementById('bookMeta').innerHTML = metaHtml;
-            
-            document.getElementById('wikiLink').onclick = () => {
-                const searchTitle = book.titleEn || book.title;
-                window.open(`https://en.wikipedia.org/wiki/${encodeURIComponent(searchTitle)}`, '_blank');
-            };
-            
-            window.currentBook = book;
-            globe.controls().autoRotate = false;
-        }
-        
-        function closeBookPanel() {
-            document.getElementById('bookPanel').classList.remove('active');
-            globe.controls().autoRotate = true;
-        }
-        
-        function generateDrama() {
-            if (window.currentBook) {
-                alert(`🎬 即将为《${window.currentBook.title}》生成AI番剧分镜...\n\n功能开发中，敬请期待！`);
-            }
-        }
-        
-        // Culture filter buttons
-        document.querySelectorAll('.culture-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.culture-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentCulture = this.dataset.culture;
-                updateGlobe();
-            });
-        });
-        
-        // Genre filter tabs
-        document.querySelectorAll('.filter-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                currentGenre = this.dataset.filter;
-                updateGlobe();
-            });
-        });
-        
-        // Search
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            if (!query) {
-                updateGlobe();
-                return;
-            }
-            const filtered = books.filter(b => 
-                (b.title && b.title.toLowerCase().includes(query)) ||
-                (b.titleEn && b.titleEn.toLowerCase().includes(query)) ||
-                (b.author && b.author.toLowerCase().includes(query)) ||
-                (b.countryZh && b.countryZh.includes(query))
-            );
-            globe.htmlElementsData(filtered);
-        });
-        
-        // Initialize
+        // Init
         window.onload = async function() {
             await loadBooks();
-            addCelestialBooks(); // Add sun/moon related books
             initGlobe();
         };
     </script>
